@@ -34,7 +34,10 @@ async function run() {
     // Database e brands field
     const brandCollection = client.db('brand-store').collection('brand-store-brands')
 
-    // Get Brands Start
+    // Database e Products er Collection create
+    const productCollection = client.db('brand-store').collection('brand-store-products')
+
+    // 1.  Get Brands Start
     app.get('/brands', async(req, res) => {
         const cursor = brandCollection.find()
         const result = await cursor.toArray()
@@ -43,7 +46,7 @@ async function run() {
     // Get Brands End 
 
 
-    // Get data for individual brand start
+    // 2. Get data for individual brand start
     app.get(`/brands/:id`, async(req, res) =>{
         const id = req.params.id
         const query = {_id : new ObjectId(id)}
@@ -52,6 +55,15 @@ async function run() {
         res.send(result)
     })
     // Get data for individual brand End
+
+    // 3. Add New Products In Database Start
+    app.post(`/products`, async(req, res) => {
+        const newProduct = req.body
+        console.log(newProduct);
+        const result = await productCollection.insertOne(newProduct)
+        res.send(result)
+    })
+    // Add New Products In Database End
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
