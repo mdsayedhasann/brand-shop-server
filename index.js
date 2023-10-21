@@ -43,7 +43,7 @@ async function run() {
         const result = await cursor.toArray()
         res.json(result)
     })
-    // Get Brands End 
+    // 1.  Get Brands End 
 
 
     // 2. Get data for individual brand start
@@ -54,7 +54,7 @@ async function run() {
         console.log(result);
         res.send(result)
     })
-    // Get data for individual brand End
+    // 2. Get data for individual brand End
 
     // 3. Add New Products In Database Start
     app.post(`/products`, async(req, res) => {
@@ -63,7 +63,25 @@ async function run() {
         const result = await productCollection.insertOne(newProduct)
         res.send(result)
     })
-    // Add New Products In Database End
+    // 3. Add New Products In Database End
+
+    // 4. Showing Added Products to the Database Start
+    app.get('/products', async(req,res) => {
+        const cursor = productCollection.find({})
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+    // 4. Showing Added Products to the Database End
+
+    //  5. Show Single Product Data Start
+    app.get(`/product/:id`, async(req, res) => {
+        const id = req.params.id
+        const query = { _id: new ObjectId(id)}
+        const result = await productCollection.findOne(query)
+        res.send(result)
+    })
+    //  5. Show Single Product Data End
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
