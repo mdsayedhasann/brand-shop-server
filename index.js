@@ -75,12 +75,22 @@ async function run() {
 
     //  5. Show Single Product Data Start
     app.get(`/product/:id`, async(req, res) => {
+        console.log('result');
         const id = req.params.id
         const query = { _id: new ObjectId(id)}
         const result = await productCollection.findOne(query)
-        res.send(result)
+        res.json(result)
     })
     //  5. Show Single Product Data End
+
+    // 6.  Delete a product Start
+    app.delete('/product/:id', async(req, res) => {
+        const id = req.params.id
+        const query = { _id: new ObjectId(id)}
+        const result = await productCollection.deleteOne(query)
+        res.json(result)
+    })
+    // 6.  Delete a product End
 
 
     // Send a ping to confirm a successful connection
