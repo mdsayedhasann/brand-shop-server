@@ -92,6 +92,39 @@ async function run() {
     })
     // 6.  Delete a product End
 
+    // 7.   Update Get Start
+    app.get('/product/:id', async(req, res) => {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)}
+        const result = await productCollection.findOne(query)
+        res.send(result)
+    })
+    // 7.   Update Get End
+
+
+    // 8    Update Put Start
+    app.put('/product/:id', async(req, res) => {
+        const id = req.params.id
+        const filter = {_id: new ObjectId(id)}
+        const options = {
+            upsert: true
+        }
+        const updateProduct = req.body 
+        const product = {
+            $set: {
+                name: updateProduct.name,
+                typeDropsown: updateProduct.typeDropsown,
+                shortDescription: updateProduct.shortDescription,
+                price: updateProduct.price,
+                photo: updateProduct.photo,
+            }
+        }
+        const result = await productCollection.updateOne(filter, product, options)
+        console.log(result);
+        res.send(result)
+    }) 
+    // 8    Update Put End 
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
